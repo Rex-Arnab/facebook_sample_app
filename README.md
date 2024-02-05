@@ -25,8 +25,13 @@ This project provides a Node.js backend implementation to interact with the Face
 1. **Clone the repository**
 
     ```
-    git clone <repository-url>
-    cd <project-directory>
+    git clone https://github.com/Rex-Arnab/facebook_sample_app.git
+    cd facebook_sample_app
+    ```
+    or if you use ssh
+    ```
+    git clone git@github.com:Rex-Arnab/facebook_sample_app.git
+    cd facebook_sample_app
     ```
 
 2. **Install dependencies**
