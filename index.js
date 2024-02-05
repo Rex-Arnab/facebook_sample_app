@@ -18,11 +18,31 @@ app.use('/fb', facebookRoutes);
 app.use('/insta', instagramRoutes);
 app.use('/webhook', webhookRoutes);
 
-app.get('/', (_req, res) => {
-    res.json({
-        message: 'Hello, World!'
-    });
+
+
+const accessToken = process.env.WEBHOOK_VERIFY_TOKEN;
+
+app.get('/', (req, res) => {
+    console.log(req.query);
+    const VERIFY_TOKEN = accessToken;
+
+    let mode = req.query['hub.mode'];
+    let token = req.query['hub.verify_token'];
+    let challenge = req.query['hub.challenge'];
+
+    if (mode && token === VERIFY_TOKEN) {
+        res.status(200).send(challenge);
+    } else {
+        res.sendStatus(403);
+    }
 });
+
+
+// app.get('/', (_req, res) => {
+//     res.json({
+//         message: 'Hello, World!'
+//     });
+// });
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
