@@ -49,7 +49,7 @@ app.get('/', async (req, res) => {
         return res.json(req.query);
     } else {
         res.json({
-            message: 'Hello, test!'
+            message: 'Hello, Social!'
         });
     }
 });
