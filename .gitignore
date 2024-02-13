@@ -48,7 +48,3 @@ Thumbs.db
 *.mov
 *.wmv
 
-.env
-.vscode
-settings.json
-package-lock-json
