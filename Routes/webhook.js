@@ -14,6 +14,11 @@ app.get('/', (req, res) => {
     if (mode && token === VERIFY_TOKEN) {
         res.status(200).send(challenge);
     } else {
+
+        console.log("Verifying CHECKSUM")
+        console.log("TOKEN I HAVE : ", VERIFY_TOKEN)
+        console.log("TOKEN i got: ", challenge)
+        console.log("Verifying Complete")
         res.sendStatus(403);
     }
 });

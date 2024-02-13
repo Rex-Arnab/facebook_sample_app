@@ -14,14 +14,17 @@ app.use(morgan('dev'));
 const facebookRoutes = require('./Routes/facebook');
 const instagramRoutes = require('./Routes/instagram');
 const webhookRoutes = require('./Routes/webhook');
+const { default: axios } = require("axios");
 app.use('/fb', facebookRoutes);
 app.use('/insta', instagramRoutes);
 app.use('/webhook', webhookRoutes);
 
-app.get('/', (_req, res) => {
-    const APP_ID = process.env.ACCESS_TOKEN;
-    const redirect_url = process.env.HOST_URL + '/fbcallback';
-    const CONFIG_ID = process.env.CONFIG_ID;
+const APP_ID = process.env.ACCESS_TOKEN;
+const APP_SECRET = process.env.ACCESS_SECRET;
+const redirect_url = process.env.HOST_URL;
+const CONFIG_ID = process.env.CONFIG_ID;
+
+app.get('/login', (_req, res) => {
 
     res.json({
         message: 'Please Login thought this url to initate facebook login for business account',
@@ -29,8 +32,26 @@ app.get('/', (_req, res) => {
     });
 });
 
-app.get('/fbcallback', (req, res) => {
-    return res.json(req.query);
+
+app.get('/', async (req, res) => {
+    const { code } = req.query;
+
+    if (code) {
+        try {
+            const resp = await axios.get(`https://graph.facebook.com/v19.0/oauth/access_token?client_id=${APP_ID}&redirect_uri=${redirect_url}&client_secret=${APP_SECRET}&code=${code}`)
+            const accessToken = resp.data.access_token;
+            return res.json(accessToken);
+        } catch (error) {
+            console.log('Redirect URI: ', redirect_url);
+            console.log(`https://graph.facebook.com/v19.0/oauth/access_token?client_id=${APP_ID}&client_secret=${APP_SECRET}&redirect_uri=${redirect_url}&code=${code}`)
+            console.log("ERROR: ", error.response.data);
+        }
+        return res.json(req.query);
+    } else {
+        res.json({
+            message: 'Hello, test!'
+        });
+    }
 });
 
 app.listen(PORT, () => {
